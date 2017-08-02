@@ -3,10 +3,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Button?>
 <GridPane fx:controller="com.kzawilski.controllers.MainController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
     <padding><Insets top="25" right="25" bottom="10" left="25"/>
     </padding>
+    <Button text="Pobierz" onAction="#openDownloadDialog"/>
     <Text text="NBP"
           GridPane.columnIndex="0" GridPane.rowIndex="0"
           GridPane.columnSpan="2"/>
