@@ -18,15 +18,11 @@ public class DownloadFlieServices {
 
     private List<String> fileList;
 
-
-
-    public DownloadFlieServices(){
+    public DownloadFlieServices() {
         fileList = new ArrayList<>();
         try {
             URL oracle = new URL("http://www.nbp.pl/kursy/xml/dir.txt");
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(oracle.openStream()));
-
+            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 // delete problematic char
@@ -34,11 +30,10 @@ public class DownloadFlieServices {
                     inputLine = inputLine.substring(1);
                 }
                 // Including only average exchange rate
-                if (!inputLine.startsWith("a")){
+                if (!inputLine.startsWith("a")) {
                     continue;
                 }
                 fileList.add(inputLine);
-
             }
             in.close();
         } catch (IOException e) {
@@ -47,14 +42,13 @@ public class DownloadFlieServices {
     }
 
 
-    public List<String> getFileList(){
+    public List<String> getFileList() {
         return fileList;
     }
 
-    public Integer downloadFile(String fileName){
+    public Integer downloadFile(String fileName) {
         String fromFile = "http://www.nbp.pl/kursy/xml/" + fileName + ".xml";
         String toFile = "nbp/" + fileName + ".xml";
-
         try {
 
             URL website = new URL(fromFile);

@@ -1,40 +1,47 @@
 package com.kzawilski.common;
 
+import javafx.concurrent.Task;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
-public class FolderWatcher {
-    public Integer watch(Path dir){
+public class FolderWatcher extends Task<Void> {
+
+    private Path checkDir() {
+        File theDir = new File("nbp");
+        System.out.println(theDir.getAbsolutePath());
+        if (!theDir.exists()) {
+            System.out.println("creating directory: " + theDir.getName());
+            try {
+                theDir.mkdir();
+            } catch (SecurityException se) {
+                return null;
+            }
+        }
+        return FileSystems.getDefault().getPath(theDir.getAbsolutePath());
+    }
+
+    private void watch(Path dir) {
         try {
             System.out.println(dir);
             WatchService watcher = FileSystems.getDefault().newWatchService();
-
-            WatchKey key = dir.register(watcher,
-                    ENTRY_CREATE);
-
-            for (;;) {
-                for (WatchEvent<?> event: key.pollEvents()) {
+            WatchKey key = dir.register(watcher, ENTRY_CREATE);
+            while (!isCancelled()) {
+                for (WatchEvent<?> event : key.pollEvents()) {
                     WatchEvent.Kind<?> kind = event.kind();
-
                     if (kind != ENTRY_CREATE) {
                         continue;
                     }
-
-                    WatchEvent<Path> ev = (WatchEvent<Path>)event;
+                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
                     Path filename = ev.context();
-
                     try {
                         Path child = dir.resolve(filename);
-                        /*
-                        TODO Changing the file causes a program crash
-                        (because a temporary file is generated)
-                        .goutputstream-GTTT4Y
-                         */
-                        if (!Files.probeContentType(child).equals("text/plain")) {
+                        if (!Files.probeContentType(child).equals("application/xml")) {
                             System.err.format("New file '%s'" +
-                                    " is not a plain text file.%n", filename);
+                                    " is not a xml file.%n", filename);
                             continue;
                         }
                     } catch (IOException x) {
@@ -45,7 +52,6 @@ public class FolderWatcher {
                     // TODO read and save to database
                     System.out.format("Found new file %s%n", filename);
                 }
-
                 boolean valid = key.reset();
                 if (!valid) {
                     break;
@@ -55,6 +61,15 @@ public class FolderWatcher {
             System.err.println(x);
 
         }
-        return 1;
     }
+
+    @Override
+    protected Void call() throws Exception {
+        Path dir = checkDir();
+        if (dir != null) {
+            this.watch(dir);
+        }
+        return null;
+    }
+
 }

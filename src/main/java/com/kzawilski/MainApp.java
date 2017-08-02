@@ -15,46 +15,27 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class MainApp extends Application {
+
+    Task<Void> task;
+
     @Override
     public void start(Stage stage) throws IOException {
+        startWacher();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
         Scene scene = new Scene(root, 300, 300);
         stage.setTitle("NBP exchange rates");
         stage.setScene(scene);
         stage.show();
-        startWacher();
     }
 
-    private void startWacher(){
-        Task<Integer> task = new Task<Integer>() {
-            @Override protected Integer call() throws Exception {
-                FolderWatcher watcher = new FolderWatcher();
-                File theDir = new File("nbp");
-                System.out.println(theDir.getAbsolutePath());
-                // if the directory does not exist, create it
-                if (!theDir.exists()) {
-                    System.out.println("creating directory: " + theDir.getName());
-                    boolean result = false;
-
-                    try{
-                        theDir.mkdir();
-                        result = true;
-                    }
-                    catch(SecurityException se){
-                        //handle it
-                    }
-                    if(result) {
-                        System.out.println("DIR created");
-                    }else {
-                        System.out.println("DIR exist ");
-                        System.out.println(theDir.getAbsolutePath());
-                    }
-                }
-                Path path = FileSystems.getDefault().getPath(theDir.getAbsolutePath());
-                return watcher.watch(path);
-            }
-        };
+    private void startWacher() {
+        task = new FolderWatcher();
         new Thread(task).start();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        task.cancel();
     }
 
     public static void main(String[] args) {
