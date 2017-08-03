@@ -12,7 +12,6 @@ public class FolderWatcher extends Task<Void> {
 
     private Path checkDir() {
         File theDir = new File("nbp");
-        System.out.println(theDir.getAbsolutePath());
         if (!theDir.exists()) {
             System.out.println("creating directory: " + theDir.getName());
             try {
@@ -26,7 +25,6 @@ public class FolderWatcher extends Task<Void> {
 
     private void watch(Path dir) {
         try {
-            System.out.println(dir);
             WatchService watcher = FileSystems.getDefault().newWatchService();
             WatchKey key = dir.register(watcher, ENTRY_CREATE);
             while (!isCancelled()) {

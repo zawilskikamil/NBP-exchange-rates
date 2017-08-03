@@ -6,6 +6,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "EXCHANGE_RATE")
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "getByDateAndCode", query = "select e from EXCHANGE_RATE where (e.date between :fromDate and :toDate) and e.code like :code")
+})
 @Access(AccessType.FIELD)
 public class ExchangeRate implements Serializable {
 
