@@ -21,7 +21,8 @@ public class DownloadFileServices {
     private List<String> fileList;
 
     public DownloadFileServices() {
-        List<String> existingFileName = DataManager.getInstance().getAllFileNames().stream()
+        DataManager dm = new DataManager();
+        List<String> existingFileName = dm.getAllFileNames().stream()
                 .map(FileName::getName)
                 .collect(Collectors.toList());
         fileList = new ArrayList<>();
@@ -38,11 +39,9 @@ public class DownloadFileServices {
                 if (!inputLine.startsWith("a")) {
                     continue;
                 }
-
-                if (existingFileName.contains(inputLine)){
+                if (existingFileName.contains(inputLine)) {
                     continue;
                 }
-
                 fileList.add(inputLine);
             }
             in.close();
@@ -66,8 +65,10 @@ public class DownloadFileServices {
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             fos.close();
             rbc.close();
-            DataManager.getInstance().saveFileName(fileName);
+            DataManager dm = new DataManager();
+            dm.saveFileName(fileName);
             fileList.remove(fileName);
+            dm.stop();
         } catch (IOException e) {
             e.printStackTrace();
             return 0;

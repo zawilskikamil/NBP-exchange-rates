@@ -3,35 +3,24 @@ package com.kzawilski.database;
 import com.kzawilski.database.domain.ExchangeRate;
 import com.kzawilski.database.domain.FileName;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 public class DataManager {
 
     private EntityManager em;
+
     private EntityManagerFactory emf;
 
-    private static DataManager instance;
-
-    private DataManager() {
+    public DataManager() {
         emf = Persistence.createEntityManagerFactory("NBP");
         em = emf.createEntityManager();
     }
 
-    public static DataManager getInstance() {
-        if (instance == null) {
-            instance = new DataManager();
-        }
-        return instance;
-    }
-
     public void saveExchangeRate(ExchangeRate exchangeRate) {
         em.getTransaction().begin();
-        ExchangeRate e = em.merge(exchangeRate);
-        System.out.println(e);
+        em.persist(exchangeRate);
         em.getTransaction().commit();
     }
 
@@ -43,26 +32,43 @@ public class DataManager {
 
     public void saveFileName(FileName fileName) {
         em.getTransaction().begin();
-        em.merge(fileName);
+        em.persist(fileName);
         em.getTransaction().commit();
     }
 
     public List<ExchangeRate> getExchangeRateByDateAndCode(Date fromDate, Date toDate, String code) {
-        return em.createNamedQuery("getExchangeRateByDateAndCode", ExchangeRate.class)
+        em.getTransaction().begin();
+        List<ExchangeRate> r = em.createNamedQuery("getExchangeRateByDateAndCode", ExchangeRate.class)
                 .setParameter("fromDate", fromDate)
                 .setParameter("toDate", toDate)
                 .setParameter("code", code)
                 .getResultList();
+        em.getTransaction().commit();
+        return r;
     }
 
     public List<ExchangeRate> getAllExchangeRate() {
-        return em.createNamedQuery("getAllExchange", ExchangeRate.class)
+        em.getTransaction().begin();
+        List<ExchangeRate> r = em.createNamedQuery("getAllExchange", ExchangeRate.class)
                 .getResultList();
+        em.getTransaction().commit();
+        return r;
     }
 
     public List<FileName> getAllFileNames() {
-        return em.createNamedQuery("getAllNames", FileName.class)
+        em.getTransaction().begin();
+        List<FileName> r = em.createNamedQuery("getAllNames", FileName.class)
                 .getResultList();
+        em.getTransaction().commit();
+        return r;
+    }
+
+    public List<String> getAllCodes() {
+        em.getTransaction().begin();
+        List<String> r = em.createNamedQuery("getAllCurrencyCodes", String.class)
+                .getResultList();
+        em.getTransaction().commit();
+        return r;
     }
 
     public void stop() {
@@ -73,8 +79,4 @@ public class DataManager {
             emf.close();
         }
     }
-
-    public List<String> getAllCodes() {
-        return em.createNamedQuery("getAllCurrencyCodes", String.class)
-                .getResultList();    }
 }

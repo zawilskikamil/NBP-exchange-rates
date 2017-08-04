@@ -7,10 +7,17 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.DatePicker?>
 <BorderPane fx:controller="com.kzawilski.controllers.MainController"
             xmlns:fx="http://javafx.com/fxml">
     <left>
-        <Button text="Pobierz" onAction="#openDownloadDialog"/>
+        <GridPane>
+            <Button GridPane.rowIndex="0" text="Pobierz" onAction="#openDownloadDialog"/>
+            <DatePicker GridPane.rowIndex="1" fx:id="fromDatePicker"/>
+            <DatePicker GridPane.rowIndex="2" fx:id="toDatePicker"/>
+            <ListView GridPane.rowIndex="3" maxWidth="100.0" fx:id="codesSelect"/>
+        </GridPane>
     </left>
     <center>
         <LineChart fx:id="chart" layoutX="200.0" layoutY="200.0" prefHeight="216.0" prefWidth="252.0">
@@ -22,4 +29,7 @@
             </yAxis>
         </LineChart>
     </center>
+    <right>
+        <Button text="Refresh" onAction="#refresh"/>
+    </right>
 </BorderPane>

@@ -92,9 +92,13 @@ public class FolderWatcher extends Task<Void> {
         return null;
     }
 
-
     public void saveToDatabase(String fileName) {
         System.out.println("Try save " + fileName);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         File file = new File(fileName);
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -104,7 +108,7 @@ public class FolderWatcher extends Task<Void> {
             NodeList nl = doc.getElementsByTagName("pozycja");
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("pl", "PL"));
             Date date = format.parse(dateString);
-            DataManager dm = DataManager.getInstance();
+            DataManager dm = new DataManager();
             for (int i = 0; i < nl.getLength(); i++) {
                 String currencyName = doc.getElementsByTagName("nazwa_waluty").item(i).getTextContent();
                 String converter = doc.getElementsByTagName("przelicznik").item(i).getTextContent();
@@ -115,10 +119,11 @@ public class FolderWatcher extends Task<Void> {
                 e.setConverter(new Integer(converter));
                 e.setCurrencyCode(currencyCode);
                 e.setDate(date);
-                e.setRate(new Double(rate.replaceAll(",",".")));
+                e.setRate(new Double(rate.replaceAll(",", ".")));
                 dm.saveExchangeRate(e);
             }
             System.out.println("save is complete");
+            dm.stop();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

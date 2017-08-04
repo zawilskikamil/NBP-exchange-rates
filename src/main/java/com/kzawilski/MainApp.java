@@ -36,7 +36,6 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         task.cancel();
-        DataManager.getInstance().stop();
     }
 
     public static void main(String[] args) {
