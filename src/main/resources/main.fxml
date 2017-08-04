@@ -13,7 +13,7 @@
             xmlns:fx="http://javafx.com/fxml">
     <left>
         <GridPane>
-            <Button GridPane.rowIndex="0" text="Pobierz" onAction="#openDownloadDialog"/>
+            <Button GridPane.rowIndex="0" text="Download" onAction="#openDownloadDialog"/>
             <DatePicker GridPane.rowIndex="1" fx:id="fromDatePicker"/>
             <DatePicker GridPane.rowIndex="2" fx:id="toDatePicker"/>
             <ListView GridPane.rowIndex="3" maxWidth="100.0" fx:id="codesSelect"/>
