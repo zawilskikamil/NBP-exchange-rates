@@ -1,24 +1,29 @@
-package com.kzawilski.download;
+package com.kzawilski.common;
+
+import com.kzawilski.database.DataManager;
+import com.kzawilski.database.domain.FileName;
 
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class DownloadFlieServices {
+public class DownloadFileServices {
 
     public static final String UTF8_BOM = "\uFEFF";
 
     private List<String> fileList;
 
-    public DownloadFlieServices() {
+    public DownloadFileServices() {
+        List<String> existingFileName = DataManager.getInstance().getAllFileNames().stream()
+                .map(FileName::getName)
+                .collect(Collectors.toList());
         fileList = new ArrayList<>();
         try {
             URL oracle = new URL("http://www.nbp.pl/kursy/xml/dir.txt");
@@ -33,6 +38,11 @@ public class DownloadFlieServices {
                 if (!inputLine.startsWith("a")) {
                     continue;
                 }
+
+                if (existingFileName.contains(inputLine)){
+                    continue;
+                }
+
                 fileList.add(inputLine);
             }
             in.close();
@@ -50,14 +60,14 @@ public class DownloadFlieServices {
         String fromFile = "http://www.nbp.pl/kursy/xml/" + fileName + ".xml";
         String toFile = "nbp/" + fileName + ".xml";
         try {
-
             URL website = new URL(fromFile);
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(toFile);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             fos.close();
             rbc.close();
-
+            DataManager.getInstance().saveFileName(fileName);
+            fileList.remove(fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return 0;

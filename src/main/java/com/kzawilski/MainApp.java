@@ -2,7 +2,9 @@ package com.kzawilski;
 
 import com.kzawilski.common.FolderWatcher;
 import com.kzawilski.database.DataManager;
+import com.kzawilski.database.domain.ExchangeRate;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class MainApp extends Application {
 
@@ -33,7 +36,7 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         task.cancel();
-        DataManager.dispose();
+        DataManager.getInstance().stop();
     }
 
     public static void main(String[] args) {

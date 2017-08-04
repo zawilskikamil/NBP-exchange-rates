@@ -1,36 +1,80 @@
 package com.kzawilski.database;
 
-import com.kzawilski.domain.ExchangeRate;
+import com.kzawilski.database.domain.ExchangeRate;
+import com.kzawilski.database.domain.FileName;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Date;
 import java.util.List;
 
 public class DataManager {
 
-    private static EntityManager em;
+    private EntityManager em;
+    private EntityManagerFactory emf;
 
-    public DataManager(){
-        em = Persistence.createEntityManagerFactory("NBP").createEntityManager();
+    private static DataManager instance;
+
+    private DataManager() {
+        emf = Persistence.createEntityManagerFactory("NBP");
+        em = emf.createEntityManager();
     }
 
-    public void saveOrUpdateExchangeRate(ExchangeRate exchangeRate) {
+    public static DataManager getInstance() {
+        if (instance == null) {
+            instance = new DataManager();
+        }
+        return instance;
+    }
+
+    public void saveExchangeRate(ExchangeRate exchangeRate) {
         em.getTransaction().begin();
-        em.merge(exchangeRate);
+        ExchangeRate e = em.merge(exchangeRate);
+        System.out.println(e);
+        em.getTransaction().commit();
+    }
+
+    public void saveFileName(String name) {
+        FileName fileName = new FileName();
+        fileName.setName(name);
+        saveFileName(fileName);
+    }
+
+    public void saveFileName(FileName fileName) {
+        em.getTransaction().begin();
+        em.merge(fileName);
         em.getTransaction().commit();
     }
 
     public List<ExchangeRate> getExchangeRateByDateAndCode(Date fromDate, Date toDate, String code) {
-        return em.createNativeQuery("getByDateAndCode", ExchangeRate.class)
-                .setParameter("fromDate",fromDate)
-                .setParameter("toDate",toDate)
-                .setParameter("code",code)
+        return em.createNamedQuery("getExchangeRateByDateAndCode", ExchangeRate.class)
+                .setParameter("fromDate", fromDate)
+                .setParameter("toDate", toDate)
+                .setParameter("code", code)
                 .getResultList();
     }
 
-    public static void dispose(){
-        em.close();
+    public List<ExchangeRate> getAllExchangeRate() {
+        return em.createNamedQuery("getAllExchange", ExchangeRate.class)
+                .getResultList();
     }
 
+    public List<FileName> getAllFileNames() {
+        return em.createNamedQuery("getAllNames", FileName.class)
+                .getResultList();
+    }
+
+    public void stop() {
+        if (em != null && em.isOpen()) {
+            em.close();
+        }
+        if (emf != null && emf.isOpen()) {
+            emf.close();
+        }
+    }
+
+    public List<String> getAllCodes() {
+        return em.createNamedQuery("getAllCurrencyCodes", String.class)
+                .getResultList();    }
 }
