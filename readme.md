@@ -47,3 +47,14 @@ zawarta w pakiecie java.nio
     + przycisk otwierający dialog do wyboru i pobrania pliku,
     + wykres kursów walut,
     + pola wyboru dat oraz walut.
+    
+    
+    GUI
+    ---
+    Okno programu
+    
+    ![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/program.png?raw=true)
+    
+    Dialog wyboru pliku do pobrania
+    
+    ![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/dialog.png?raw=true)
