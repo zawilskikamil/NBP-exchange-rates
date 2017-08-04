@@ -62,10 +62,10 @@ Następnie wystarczy zbudować paczkę .jar przy pomocy Mavena i uruchomić plik
 GUI
 ---
     
-    Okno programu
+Okno programu
     
-    ![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/program.png?raw=true)
+![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/program.png?raw=true)
     
-    Dialog wyboru pliku do pobrania
+Dialog wyboru pliku do pobrania
     
-    ![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/dialog.png?raw=true)
+![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/dialog.png?raw=true)
