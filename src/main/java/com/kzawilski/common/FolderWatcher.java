@@ -99,7 +99,7 @@ public class FolderWatcher extends Task<Void> {
         return null;
     }
 
-    public void saveToDatabase(String fileName) {
+    private void saveToDatabase(String fileName) {
         if (savedFiles.contains(fileName)){
             System.out.println("File " + fileName + " was already save to database");
             return;
@@ -136,13 +136,7 @@ public class FolderWatcher extends Task<Void> {
             dm.stopEntityManager();
             System.out.println("save is complete");
             savedFiles.add(fileName);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

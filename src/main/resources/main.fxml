@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane fx:controller="com.kzawilski.controllers.MainController"
             xmlns:fx="http://javafx.com/fxml">
     <left>
@@ -20,14 +19,16 @@
         </GridPane>
     </left>
     <center>
-        <LineChart fx:id="chart" layoutX="200.0" layoutY="200.0" prefHeight="216.0" prefWidth="252.0">
-            <xAxis>
-                <CategoryAxis side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT" />
-            </yAxis>
-        </LineChart>
+        <ScrollPane fx:id="chartPane">
+            <LineChart fx:id="chart">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" />
+                </yAxis>
+            </LineChart>
+        </ScrollPane>
     </center>
     <right>
         <Button text="Refresh" onAction="#refresh"/>

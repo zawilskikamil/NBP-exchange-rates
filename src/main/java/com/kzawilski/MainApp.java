@@ -1,5 +1,6 @@
 package com.kzawilski;
 
+import com.kzawilski.common.DownloadFileServices;
 import com.kzawilski.common.FolderWatcher;
 import com.kzawilski.database.DataManager;
 import com.kzawilski.database.domain.ExchangeRate;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 public class MainApp extends Application {
 
@@ -22,7 +24,8 @@ public class MainApp extends Application {
     public void start(Stage stage) throws IOException {
         startWatcher();
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
-        Scene scene = new Scene(root, 300, 300);
+        Scene scene = new Scene(root, 1000, 500);
+        scene.getStylesheets().add("main.css");
         stage.setTitle("NBP exchange rates");
         stage.setScene(scene);
         stage.show();

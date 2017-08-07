@@ -7,8 +7,8 @@ import java.util.Date;
 @Entity
 @Table(name = "EXCHANGE_RATES")
 @NamedQueries({
-        @NamedQuery(name = "getExchangeRateByDateAndCode", query = "select e from ExchangeRate e where (e.date between :fromDate and :toDate) and e.currencyCode like :code"),
-        @NamedQuery(name = "getAllExchange", query = "select e from ExchangeRate e"),
+        @NamedQuery(name = "getExchangeRateByDateAndCode", query = "select e from ExchangeRate e where (e.date between :fromDate and :toDate) and e.currencyCode like :code order by e.date"),
+        @NamedQuery(name = "getAllExchange", query = "select e from ExchangeRate e order by e.date"),
         @NamedQuery(name = "getAllCurrencyCodes", query = "select distinct e.currencyCode from ExchangeRate e")
 })
 @Access(AccessType.FIELD)
@@ -31,7 +31,7 @@ public class ExchangeRate implements Serializable {
     @Column(name = "RATE")
     private Double rate;
 
-    @Column(name = "date")
+    @Column(name = "ATE")
     private Date date;
 
     public long getId() {
