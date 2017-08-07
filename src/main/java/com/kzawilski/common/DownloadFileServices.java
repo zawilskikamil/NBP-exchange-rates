@@ -55,7 +55,7 @@ public class DownloadFileServices {
         return fileList;
     }
 
-    public Integer downloadFile(String fileName) {
+    public void downloadFile(String fileName) {
         String fromFile = "http://www.nbp.pl/kursy/xml/" + fileName + ".xml";
         String toFile = "nbp/" + fileName + ".xml";
         try {
@@ -68,11 +68,11 @@ public class DownloadFileServices {
             DataManager dm = new DataManager();
             dm.saveFileName(fileName);
             fileList.remove(fileName);
-            dm.stop();
+            dm.stopEntityManager();
         } catch (IOException e) {
             e.printStackTrace();
-            return 0;
+            return;
         }
-        return 1;
+        return;
     }
 }

@@ -6,8 +6,6 @@ import com.kzawilski.database.domain.ExchangeRate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -16,11 +14,9 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.cell.ComboBoxListCell;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 public class MainController implements Initializable {
@@ -71,7 +67,7 @@ public class MainController implements Initializable {
         DataManager dm = new DataManager();
         rates = dm.getAllExchangeRate();
         codes.addAll(dm.getAllCodes());
-        dm.stop();
+        dm.stopEntityManager();
         DrawChart();
         prepareSelectCodesList();
     }

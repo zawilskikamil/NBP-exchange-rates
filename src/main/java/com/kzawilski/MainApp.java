@@ -36,6 +36,7 @@ public class MainApp extends Application {
     @Override
     public void stop() throws Exception {
         task.cancel();
+        DataManager.stopEntityManagerFactory();
     }
 
     public static void main(String[] args) {

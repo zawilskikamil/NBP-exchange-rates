@@ -11,10 +11,12 @@ public class DataManager {
 
     private EntityManager em;
 
-    private EntityManagerFactory emf;
+    private static EntityManagerFactory emf;
 
     public DataManager() {
-        emf = Persistence.createEntityManagerFactory("NBP");
+        if (emf == null) {
+            emf = Persistence.createEntityManagerFactory("NBP");
+        }
         em = emf.createEntityManager();
     }
 
@@ -71,12 +73,15 @@ public class DataManager {
         return r;
     }
 
-    public void stop() {
-        if (em != null && em.isOpen()) {
-            em.close();
-        }
+    public static void stopEntityManagerFactory(){
         if (emf != null && emf.isOpen()) {
             emf.close();
+        }
+    }
+
+    public void stopEntityManager() {
+        if (em != null && em.isOpen()) {
+            em.close();
         }
     }
 }

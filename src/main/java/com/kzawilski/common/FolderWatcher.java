@@ -4,7 +4,6 @@ import com.kzawilski.database.DataManager;
 import com.kzawilski.database.domain.ExchangeRate;
 import javafx.concurrent.Task;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -17,6 +16,7 @@ import java.nio.file.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +24,13 @@ import java.util.Locale;
 import static java.nio.file.StandardWatchEventKinds.*;
 
 public class FolderWatcher extends Task<Void> {
+
+    private List<String> savedFiles;
+
+    public FolderWatcher(){
+        savedFiles = new ArrayList<>();
+    }
+
     private Path checkDir() {
         File theDir = new File("nbp");
         if (!theDir.exists()) {
@@ -93,6 +100,10 @@ public class FolderWatcher extends Task<Void> {
     }
 
     public void saveToDatabase(String fileName) {
+        if (savedFiles.contains(fileName)){
+            System.out.println("File " + fileName + " was already save to database");
+            return;
+        }
         System.out.println("Try save " + fileName);
         try {
             Thread.sleep(1000);
@@ -122,8 +133,9 @@ public class FolderWatcher extends Task<Void> {
                 e.setRate(new Double(rate.replaceAll(",", ".")));
                 dm.saveExchangeRate(e);
             }
+            dm.stopEntityManager();
             System.out.println("save is complete");
-            dm.stop();
+            savedFiles.add(fileName);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
