@@ -47,3 +47,25 @@ zawarta w pakiecie java.nio
     + przycisk otwierający dialog do wyboru i pobrania pliku,
     + wykres kursów walut,
     + pola wyboru dat oraz walut.
+    
+Uruchomienie
+------------
+
+Przed uruchomieniem programu należy utworzyć bazę w PostgreSQL
+nazwa bazy:  nbp
+user:        nbp
+hasło:       nbp
+
+Następnie wystarczy zbudować paczkę .jar przy pomocy Mavena i uruchomić plik NBP-exchange-rates-jar-with-dependencies.jar
+
+    
+GUI
+---
+    
+Okno programu
+    
+![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/program.png?raw=true)
+    
+Dialog wyboru pliku do pobrania
+    
+![alt text](https://github.com/zawilskikamil/NBP-exchange-rates/blob/master/image/dialog.png?raw=true)
