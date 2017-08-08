@@ -8,21 +8,27 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.event.WeakEventHandler?>
 <BorderPane fx:controller="com.kzawilski.controllers.MainController"
             xmlns:fx="http://javafx.com/fxml">
     <left>
         <GridPane>
             <Button GridPane.rowIndex="0" text="Download" onAction="#openDownloadDialog"/>
-            <DatePicker GridPane.rowIndex="1" fx:id="fromDatePicker"/>
-            <DatePicker GridPane.rowIndex="2" fx:id="toDatePicker"/>
-            <ListView GridPane.rowIndex="3" maxWidth="100.0" fx:id="codesSelect"/>
+            <Label GridPane.rowIndex="1" text="date from:"/>
+            <DatePicker GridPane.rowIndex="2" fx:id="fromDatePicker"/>
+            <Label GridPane.rowIndex="3" text="date to:"/>
+            <DatePicker GridPane.rowIndex="4" fx:id="toDatePicker"/>
+            <Label GridPane.rowIndex="5" text="select currency:"/>
+            <ListView GridPane.rowIndex="6" maxWidth="100.0" maxHeight="100" fx:id="codesSelect"/>
         </GridPane>
     </left>
     <center>
         <ScrollPane fx:id="chartPane">
             <LineChart fx:id="chart">
                 <xAxis>
-                    <CategoryAxis side="BOTTOM" />
+                    <CategoryAxis side="BOTTOM"/>
                 </xAxis>
                 <yAxis>
                     <NumberAxis side="LEFT" />

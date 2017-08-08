@@ -1,6 +1,7 @@
 package com.kzawilski.controllers;
 
 import com.kzawilski.common.DownloadFileServices;
+import com.kzawilski.common.Prediction;
 import com.kzawilski.database.DataManager;
 import com.kzawilski.database.domain.ExchangeRate;
 import javafx.collections.FXCollections;
@@ -53,7 +54,7 @@ public class MainController implements Initializable {
         codes = new TreeSet<>();
         chartPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         chartPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        chart.setMaxSize(Double.MAX_VALUE, 500);
+        chart.setAnimated(false);
         fromDatePicker.setOnAction(t -> {
             LocalDate date = fromDatePicker.getValue();
             System.out.println("Selected date: " + date);
@@ -94,8 +95,6 @@ public class MainController implements Initializable {
 
     public void DrawChart() {
         chart.getData().clear();
-        Series series = new Series();
-        series.setName(selectedCurrency);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         List<ExchangeRate> rates = this.rates.stream().filter(rate ->
@@ -103,16 +102,31 @@ public class MainController implements Initializable {
                         && (toDate == null || rate.getDate().before(toDate))
                         && (fromDate == null || rate.getDate().after(fromDate))
         ).collect(Collectors.toList());
-        List<Data> data = new ArrayList<>();
-        for (ExchangeRate rate : rates) {
-            data.add(new Data(
-                            dateFormat.format(rate.getDate()),
-                            rate.getRate()
-                    )
-            );
+        Prediction prediction = new Prediction(rates);
+
+        Date[] dates = prediction.getDateSeries();
+        Double[] series = prediction.getRateSeries();
+        Double[] trend = prediction.getTrend();
+
+        Series series0 = new Series();
+        series0.setName(selectedCurrency);
+        Series series1 = new Series();
+        series1.setName("Trend");
+
+        List<Data> data0 = new ArrayList<>();
+        List<Data> data1 = new ArrayList<>();
+
+        for (int i = 0; i < dates.length; i++) {
+            data0.add(new Data(dateFormat.format(dates[i]),series[i]));
+            if (trend[i] != null) {
+                data1.add(new Data(dateFormat.format(dates[i]), trend[i]));
+            }
         }
-        series.getData().addAll(data);
-        chart.getData().add(series);
+
+        series0.getData().addAll(data0);
+        series1.getData().addAll(data1);
+        chart.getData().addAll(series0,series1);
+        chart.setPrefWidth(dates.length*40.0);
     }
 
     public void openDownloadDialog(ActionEvent actionEvent) {

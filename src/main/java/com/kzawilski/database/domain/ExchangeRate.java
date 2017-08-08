@@ -31,7 +31,7 @@ public class ExchangeRate implements Serializable {
     @Column(name = "RATE")
     private Double rate;
 
-    @Column(name = "ATE")
+    @Column(name = "DATE")
     private Date date;
 
     public long getId() {
